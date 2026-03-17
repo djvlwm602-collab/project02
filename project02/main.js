@@ -34,6 +34,14 @@ let velY        = 0;
 const FRICTION  = 0.88;
 const MIN_VEL   = 0.4;
 
+/* 마우스 위치 기반 오토팬 속도 (관성 포함) */
+let autoVelX    = 0;
+let autoVelY    = 0;
+const AUTO_MAX     = 9.0;   /* 최대 속도 px/frame */
+const AUTO_DEAD    = 0.12;  /* 중앙 데드존 비율 */
+const AUTO_ACCEL   = 0.05;  /* 속도 변화 부드러움 */
+const AUTO_INERTIA = 0.90;  /* 데드존 진입 시 감속 계수 */
+
 let isDragging  = false;
 let lastPtrX    = 0;
 let lastPtrY    = 0;
@@ -387,21 +395,29 @@ function tick() {
     targetX += velX;
     targetY += velY;
 
-    /* 마우스 위치 기반 오토팬 —
-       마우스가 화면 중앙에서 멀어질수록 그 방향으로 자동 이동
-       중앙 15% 데드존: 커서가 중앙 근처에 있을 때는 정지 */
-    const AUTO_SPEED = 5.0;
-    const DEAD_ZONE  = 0.10;
+    /* 마우스 위치 기반 오토팬 (Inverse 방향 + 관성 감속)
+       - 마우스 왼쪽 → 오른쪽 영역이 보임 (캔버스 오른쪽 이동 = offsetX 감소)
+       - 마우스 오른쪽 → 왼쪽 영역이 보임 (캔버스 왼쪽 이동 = offsetX 증가)
+       - 중앙 데드존: 속도가 0으로 수렴, 관성으로 부드럽게 감속 */
     const cx = window.innerWidth  / 2;
     const cy = window.innerHeight / 2;
     const nx = (mouseX - cx) / cx;   /* -1 ~ 1 정규화 */
     const ny = (mouseY - cy) / cy;
-    const avx = Math.abs(nx) > DEAD_ZONE
-      ? Math.sign(nx) * ((Math.abs(nx) - DEAD_ZONE) / (1 - DEAD_ZONE)) * AUTO_SPEED : 0;
-    const avy = Math.abs(ny) > DEAD_ZONE
-      ? Math.sign(ny) * ((Math.abs(ny) - DEAD_ZONE) / (1 - DEAD_ZONE)) * AUTO_SPEED : 0;
-    targetX += avx;
-    targetY += avy;
+
+    /* 데드존 밖일 때 목표 속도 계산 — INVERSE 방향 (부호 반전) */
+    const tgtVelX = Math.abs(nx) > AUTO_DEAD
+      ? -Math.sign(nx) * ((Math.abs(nx) - AUTO_DEAD) / (1 - AUTO_DEAD)) * AUTO_MAX : 0;
+    const tgtVelY = Math.abs(ny) > AUTO_DEAD
+      ? -Math.sign(ny) * ((Math.abs(ny) - AUTO_DEAD) / (1 - AUTO_DEAD)) * AUTO_MAX : 0;
+
+    /* 데드존 내: 관성으로 감속 / 밖: 목표 속도로 부드럽게 가속 */
+    if (tgtVelX === 0) { autoVelX *= AUTO_INERTIA; if (Math.abs(autoVelX) < 0.05) autoVelX = 0; }
+    else               { autoVelX += (tgtVelX - autoVelX) * AUTO_ACCEL; }
+    if (tgtVelY === 0) { autoVelY *= AUTO_INERTIA; if (Math.abs(autoVelY) < 0.05) autoVelY = 0; }
+    else               { autoVelY += (tgtVelY - autoVelY) * AUTO_ACCEL; }
+
+    targetX += autoVelX;
+    targetY += autoVelY;
   }
 
   /* iheartcomix lerp — 현재 오프셋을 target으로 부드럽게 끌어당김 */
