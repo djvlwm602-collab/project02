@@ -139,6 +139,17 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
   const meta  = CATEGORIES[cfg.tag] || MOODS[cfg.tag] || {};
   const color = meta.color || '#ffffff';
 
+  /* float 파라미터는 베이스 아이템당 1회만 계산 —
+     모든 복사본(3×3)이 동일한 값을 공유해야 wrap 시 튀김 없음 */
+  const sharedFloat = {
+    phaseY: cfg.phase,
+    phaseX: Math.random() * Math.PI * 2,
+    freqY:  0.35 + Math.random() * 0.45,
+    freqX:  0.25 + Math.random() * 0.35,
+    ampY:   6  + Math.random() * 9,
+    ampX:   4  + Math.random() * 7,
+  };
+
   for (let gy = 0; gy < GRID; gy++) {
     for (let gx = 0; gx < GRID; gx++) {
       /* 이 복사본의 월드 절대 위치 */
@@ -166,7 +177,7 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
         el.innerHTML = `<span>${cfg.tag}</span>`;
       }
       else if (cfg.type === 'sticker') {
-        /* 스티커: 장식용 이미지, 클릭 불가 (rotation은 애니메이션 루프에서 처리) */
+        /* 스티커: 장식용 이미지, 클릭 불가 */
         el.className += ' sticker-item';
         el.style.width = cfg.size + 'px';
         el.innerHTML = `<img src="${cfg.src}" alt="sticker" draggable="false">`;
@@ -193,16 +204,8 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
         setTimeout(() => el.classList.add('visible'), 350 + baseIdx * 80);
       }
 
-      /* 요소마다 랜덤 float 파라미터 — 각기 다른 리듬 */
-      allItems.push({
-        el, wx, wy, cfg,
-        phaseY: cfg.phase,
-        phaseX: Math.random() * Math.PI * 2,
-        freqY:  0.35 + Math.random() * 0.45,  /* 느린 주파수 */
-        freqX:  0.25 + Math.random() * 0.35,
-        ampY:   6  + Math.random() * 9,
-        ampX:   4  + Math.random() * 7,
-      });
+      /* 복사본 모두 동일한 float 파라미터 사용 — wrap 전환 시 위치 일치 보장 */
+      allItems.push({ el, wx, wy, cfg, ...sharedFloat });
     }
   }
 });
@@ -218,6 +221,14 @@ const LOGO_H    = Math.round(LOGO_W * 0.62); /* PNG 비율 추정 */
 const logoTileX = Math.round(window.innerWidth  / 2 - LOGO_W / 2);
 const logoTileY = Math.round(window.innerHeight / 2 - LOGO_H / 2);
 const logoCfg   = { type: 'logo', rot: 0, phase: 1.4 };
+const logoFloat = {
+  phaseY: logoCfg.phase,
+  phaseX: Math.random() * Math.PI * 2,
+  freqY:  0.35 + Math.random() * 0.45,
+  freqX:  0.25 + Math.random() * 0.35,
+  ampY:   5  + Math.random() * 7,
+  ampX:   3  + Math.random() * 5,
+};
 
 for (let gy = 0; gy < GRID; gy++) {
   for (let gx = 0; gx < GRID; gx++) {
@@ -236,15 +247,7 @@ for (let gy = 0; gy < GRID; gy++) {
     /* 중앙 타일은 즉시 표시 — 다른 타일은 가상화가 관리 */
     if (gx === 1 && gy === 1) el.classList.add('visible');
 
-    allItems.push({
-      el, wx, wy, cfg: logoCfg,
-      phaseY: logoCfg.phase,
-      phaseX: Math.random() * Math.PI * 2,
-      freqY:  0.35 + Math.random() * 0.45,
-      freqX:  0.25 + Math.random() * 0.35,
-      ampY:   5  + Math.random() * 7,
-      ampX:   3  + Math.random() * 5,
-    });
+    allItems.push({ el, wx, wy, cfg: logoCfg, ...logoFloat });
   }
 }
 
