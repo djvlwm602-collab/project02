@@ -404,11 +404,11 @@ function tick() {
     const nx = (mouseX - cx) / cx;   /* -1 ~ 1 정규화 */
     const ny = (mouseY - cy) / cy;
 
-    /* 데드존 밖일 때 목표 속도 계산 — INVERSE 방향 (부호 반전) */
+    /* 데드존 밖일 때 목표 속도 계산 — 마우스 방향과 동일 */
     const tgtVelX = Math.abs(nx) > AUTO_DEAD
-      ? -Math.sign(nx) * ((Math.abs(nx) - AUTO_DEAD) / (1 - AUTO_DEAD)) * AUTO_MAX : 0;
+      ? Math.sign(nx) * ((Math.abs(nx) - AUTO_DEAD) / (1 - AUTO_DEAD)) * AUTO_MAX : 0;
     const tgtVelY = Math.abs(ny) > AUTO_DEAD
-      ? -Math.sign(ny) * ((Math.abs(ny) - AUTO_DEAD) / (1 - AUTO_DEAD)) * AUTO_MAX : 0;
+      ? Math.sign(ny) * ((Math.abs(ny) - AUTO_DEAD) / (1 - AUTO_DEAD)) * AUTO_MAX : 0;
 
     /* 데드존 내: 관성으로 감속 / 밖: 목표 속도로 부드럽게 가속 */
     if (tgtVelX === 0) { autoVelX *= AUTO_INERTIA; if (Math.abs(autoVelX) < 0.05) autoVelX = 0; }
