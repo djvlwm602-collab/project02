@@ -42,23 +42,28 @@ let startPtrY   = 0;
 let didDrag     = false;   /* true면 클릭 이벤트 무시 */
 
 /* ─────────────────────────────────────────────
-   3. 말풍선 커서 추적
+   3. 말풍선 커서 추적 + 마우스 위치 오토팬
 ───────────────────────────────────────────── */
-const bubbleEl = document.getElementById('cursor-bubble');
-let   bubbleX  = -300;
-let   bubbleY  = -300;
-let   targetX  = -300;
-let   targetY  = -300;
+const bubbleEl    = document.getElementById('cursor-bubble');
+let   bubbleX     = -300;
+let   bubbleY     = -300;
+let   bubbleTgtX  = -300;   /* 말풍선 lerp 목표 (canvas targetX와 분리) */
+let   bubbleTgtY  = -300;
+
+let   mouseX      = window.innerWidth  / 2;  /* 오토팬용 마우스 위치 */
+let   mouseY      = window.innerHeight / 2;
 
 document.addEventListener('mousemove', e => {
-  targetX = e.clientX;
-  targetY = e.clientY;
+  bubbleTgtX = e.clientX;
+  bubbleTgtY = e.clientY;
+  mouseX     = e.clientX;
+  mouseY     = e.clientY;
 });
 
 /* 말풍선을 lerp로 부드럽게 따라오게 함 */
 function tickBubble() {
-  bubbleX += (targetX - bubbleX) * 0.18;
-  bubbleY += (targetY - bubbleY) * 0.18;
+  bubbleX += (bubbleTgtX - bubbleX) * 0.18;
+  bubbleY += (bubbleTgtY - bubbleY) * 0.18;
   bubbleEl.style.left = bubbleX + 'px';
   bubbleEl.style.top  = bubbleY + 'px';
   requestAnimationFrame(tickBubble);
@@ -381,6 +386,22 @@ function tick() {
     if (Math.abs(velY) < MIN_VEL) velY = 0;
     targetX += velX;
     targetY += velY;
+
+    /* 마우스 위치 기반 오토팬 —
+       마우스가 화면 중앙에서 멀어질수록 그 방향으로 자동 이동
+       중앙 15% 데드존: 커서가 중앙 근처에 있을 때는 정지 */
+    const AUTO_SPEED = 5.0;
+    const DEAD_ZONE  = 0.10;
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    const nx = (mouseX - cx) / cx;   /* -1 ~ 1 정규화 */
+    const ny = (mouseY - cy) / cy;
+    const avx = Math.abs(nx) > DEAD_ZONE
+      ? Math.sign(nx) * ((Math.abs(nx) - DEAD_ZONE) / (1 - DEAD_ZONE)) * AUTO_SPEED : 0;
+    const avy = Math.abs(ny) > DEAD_ZONE
+      ? Math.sign(ny) * ((Math.abs(ny) - DEAD_ZONE) / (1 - DEAD_ZONE)) * AUTO_SPEED : 0;
+    targetX += avx;
+    targetY += avy;
   }
 
   /* iheartcomix lerp — 현재 오프셋을 target으로 부드럽게 끌어당김 */
