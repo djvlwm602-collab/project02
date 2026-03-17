@@ -71,18 +71,24 @@ tickCursorRing();
 ───────────────────────────────────────────── */
 const ITEMS_BASE = [
   /* ── 음식 이미지 ── */
-  { type: 'image', tag: '한식',   x:  180, y:  80,  rot: -5,  size: 200, phase: 0.0 },
-  { type: 'image', tag: '양식',   x: 1060, y:  55,  rot:  4,  size: 185, phase: 1.2 },
-  { type: 'image', tag: '일식',   x: 2380, y: 140,  rot: -3,  size: 210, phase: 2.4 },
-  { type: 'image', tag: '분식',   x:  100, y: 1080, rot:  6,  size: 190, phase: 0.8 },
-  { type: 'image', tag: '디저트', x: 1380, y: 1490, rot: -7,  size: 175, phase: 1.6 },
+  /* 로고 안전 구역: 중앙 x≈350~1050, y≈200~720 → 이 범위를 피해 배치 */
+  { type: 'image', tag: '한식',      x:   60, y:   80, rot: -5, size: 200, phase: 0.0 }, /* 좌측 확보 */
+  { type: 'image', tag: '양식',      x: 1250, y:   55, rot:  4, size: 185, phase: 1.2 }, /* 로고 우측 여유 */
+  { type: 'image', tag: '일식',      x: 2380, y:  140, rot: -3, size: 210, phase: 2.4 },
+  { type: 'image', tag: '분식',      x:  100, y: 1080, rot:  6, size: 190, phase: 0.8 },
+  { type: 'image', tag: '디저트',    x: 1380, y: 1490, rot: -7, size: 175, phase: 1.6 },
+  { type: 'image', tag: '카페',      x:   55, y:  460, rot: -4, size: 195, phase: 0.4 }, /* 로고 좌측 아래로 이동 */
+  { type: 'image', tag: '패스트푸드', x: 2100, y:  400, rot:  3, size: 185, phase: 1.3 },
+  { type: 'image', tag: '야식',      x: 1680, y:  750, rot: -6, size: 200, phase: 2.5 },
+  { type: 'image', tag: '고기',      x:  300, y:  900, rot:  5, size: 205, phase: 0.9 },
+  { type: 'image', tag: '아시안',    x: 2400, y: 1350, rot: -2, size: 190, phase: 1.8 },
 
-  /* ── 카테고리 아이콘 ── */
-  { type: 'icon', tag: '한식',    x:  640, y:  680, rot: 10,  size: 68,  phase: 2.1 },
-  { type: 'icon', tag: '양식',    x: 1580, y:  310, rot: -8,  size: 64,  phase: 0.5 },
-  { type: 'icon', tag: '일식',    x: 2580, y: 1180, rot:  5,  size: 72,  phase: 3.0 },
-  { type: 'icon', tag: '분식',    x:  340, y: 1580, rot: -12, size: 60,  phase: 1.8 },
-  { type: 'icon', tag: '디저트',  x: 1840, y: 1700, rot:  8,  size: 64,  phase: 2.7 },
+  /* ── 스티커 이미지 (장식용) ── */
+  { type: 'sticker', src: 'img/icon/img002.png', x:  720, y:  750, rot: -8, size: 120, phase: 0.6 }, /* 로고 아래로 이동 */
+  { type: 'sticker', src: 'img/icon/img003.png', x: 1540, y:  290, rot:  6, size: 110, phase: 1.7 },
+  { type: 'sticker', src: 'img/icon/img004.png', x:  900, y: 1270, rot: -5, size: 125, phase: 2.8 },
+  { type: 'sticker', src: 'img/icon/img005.png', x: 2190, y: 1090, rot:  9, size: 115, phase: 0.2 },
+  { type: 'sticker', src: 'img/icon/img006.png', x:  460, y: 1650, rot: -7, size: 120, phase: 2.1 },
 
   /* ── 무드 키워드 텍스트 ── */
   { type: 'text', tag: '매콤',     x:   20, y:  370, rot: -2, phase: 0.3 },
@@ -92,12 +98,6 @@ const ITEMS_BASE = [
   { type: 'text', tag: '혼밥',     x: 1350, y:  160, rot: -1, phase: 1.9 },
   { type: 'text', tag: '로컬맛집', x: 1740, y: 1080, rot:  3, phase: 3.1 },
 
-  /* ── 장식 텍스트 (클릭 불가) ── */
-  { type: 'deco', text: 'FOOD',    x:  420, y:  480, rot: -4,  size: 120, phase: 0.6 },
-  { type: 'deco', text: 'FINDER',  x: 1200, y:  880, rot:  2,  size: 100, phase: 1.1 },
-  { type: 'deco', text: '01',      x:  900, y:  320, rot: -6,  size: 160, phase: 2.0 },
-  { type: 'deco', text: '02',      x: 2100, y:  900, rot:  4,  size: 140, phase: 0.9 },
-  { type: 'deco', text: '03',      x:  600, y: 1300, rot: -2,  size: 130, phase: 1.7 },
 ];
 
 /* ─────────────────────────────────────────────
@@ -125,9 +125,7 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
       if (cfg.type === 'image') {
         el.className += ' img-item';
         el.style.width = cfg.size + 'px';
-        el.innerHTML = `
-          <img src="${meta.image}" alt="${cfg.tag}" draggable="false">
-          <span class="img-label">${cfg.tag}</span>`;
+        el.innerHTML = `<img src="${meta.image}" alt="${cfg.tag}" draggable="false">`;
       }
       else if (cfg.type === 'icon') {
         el.className += ' img-item icon-item';
@@ -138,20 +136,24 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
         el.className += ' text-item';
         el.innerHTML = `<span>${cfg.tag}</span>`;
       }
+      else if (cfg.type === 'sticker') {
+        /* 스티커: 장식용 이미지, 클릭 불가 (rotation은 애니메이션 루프에서 처리) */
+        el.className += ' sticker-item';
+        el.style.width = cfg.size + 'px';
+        el.innerHTML = `<img src="${cfg.src}" alt="sticker" draggable="false">`;
+      }
       else if (cfg.type === 'deco') {
         el.className += ' deco-item';
         el.style.fontSize = cfg.size + 'px';
         el.textContent = cfg.text;
       }
 
-      /* 클릭 이벤트 — deco는 제외, 드래그와 구분 */
-      if (cfg.type !== 'deco') {
+      /* 클릭 이벤트 — deco·sticker는 제외, 드래그와 구분 */
+      if (cfg.type !== 'deco' && cfg.type !== 'sticker') {
         el.addEventListener('click', () => {
           if (didDrag) return; /* 드래그였으면 무시 */
           navigateTo(`detail.html?tag=${encodeURIComponent(cfg.tag)}`);
         });
-        el.addEventListener('mouseenter', () => document.body.classList.add('is-hovering'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('is-hovering'));
       }
 
       worldEl.appendChild(el);
@@ -168,7 +170,40 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
 });
 
 /* ─────────────────────────────────────────────
-   6. 포인터 이벤트 (마우스 + 터치 통합)
+   6. 로고 아이템 — 진입 시 뷰포트 정중앙에 배치
+   ITEMS_BASE와 별도로 동적 좌표를 계산해
+   중앙 타일(1,1) 기준 위치를 설정
+───────────────────────────────────────────── */
+const LOGO_W    = 570;
+const LOGO_H    = Math.round(LOGO_W * 0.62); /* PNG 비율 추정 */
+/* 타일 좌표 = 스크린 좌표 (초기 오프셋이 TILE_W, TILE_H이므로 1:1 대응) */
+const logoTileX = Math.round(window.innerWidth  / 2 - LOGO_W / 2);
+const logoTileY = Math.round(window.innerHeight / 2 - LOGO_H / 2);
+const logoCfg   = { type: 'logo', rot: 0, phase: 1.4 };
+
+for (let gy = 0; gy < GRID; gy++) {
+  for (let gx = 0; gx < GRID; gx++) {
+    const wx = logoTileX + gx * TILE_W;
+    const wy = logoTileY + gy * TILE_H;
+
+    const el = document.createElement('div');
+    el.className   = 'float-item logo-item';
+    el.style.left  = wx + 'px';
+    el.style.top   = wy + 'px';
+    el.style.width = LOGO_W + 'px';
+    el.innerHTML   = `<img src="img/title-logo.png" alt="오늘 뭐 먹지?" draggable="false">`;
+
+    worldEl.appendChild(el);
+
+    /* 중앙 타일은 즉시 표시 — 다른 타일은 가상화가 관리 */
+    if (gx === 1 && gy === 1) el.classList.add('visible');
+
+    allItems.push({ el, wx, wy, cfg: logoCfg, phase: logoCfg.phase });
+  }
+}
+
+/* ─────────────────────────────────────────────
+   7. 포인터 이벤트 (마우스 + 터치 통합)
 ───────────────────────────────────────────── */
 const canvasEl = document.getElementById('canvas');
 

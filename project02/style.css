@@ -13,7 +13,7 @@
 }
 
 :root {
-  --bg:     #0D0D0D;
+  --bg:     #000000;
   --white:  #FFFFFF;
   --red:    #FF142D;
   --yellow: #FFD600;
@@ -62,19 +62,6 @@ html, body {
               margin 0.25s ease, border-color 0.25s ease, opacity 0.25s;
 }
 
-/* 호버 상태 */
-body.is-hovering #cursor {
-  width: 12px;
-  height: 12px;
-  background: var(--yellow);
-}
-body.is-hovering #cursor-follower {
-  width: 70px;
-  height: 70px;
-  margin: -35px 0 0 -35px;
-  border-color: var(--yellow);
-  border-width: 2px;
-}
 
 /* 드래그 상태 */
 body.is-dragging #cursor {
@@ -130,8 +117,8 @@ body.is-dragging #cursor-follower {
 =================================== */
 .bg-text {
   position: absolute;
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 900;
+  font-family: 'Nanum Square Round', sans-serif;
+  font-weight: 800;
   font-size: 26vw;
   color: rgba(255, 255, 255, 0.014);
   white-space: nowrap;
@@ -145,42 +132,17 @@ body.is-dragging #cursor-follower {
 .bg-text-2 { bottom: -4vw; right: -1vw; }
 
 /* ===================================
-   중앙 타이틀 (뷰포트에 고정)
+   로고 아이템 (캔버스 월드에 배치)
 =================================== */
-#title-block {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 20;
+.logo-item img {
+  width: 100%;
+  height: auto;
+  display: block;
   pointer-events: none;
-  /* 드래그 중 약간 투명 */
-  transition: opacity 0.3s;
+  filter: drop-shadow(0 8px 28px rgba(0, 0, 0, 0.55));
+  transition: filter 0.3s;
 }
 
-body.is-dragging #title-block {
-  opacity: 0.35;
-}
-
-#main-title {
-  font-family: 'Black Han Sans', sans-serif;
-  font-size: clamp(68px, 10.5vw, 144px);
-  line-height: 0.9;
-  color: var(--white);
-  letter-spacing: -0.01em;
-}
-
-#main-title .accent { color: var(--red); }
-
-#subtitle {
-  margin-top: 20px;
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: clamp(12px, 1vw, 15px);
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.36);
-  letter-spacing: 0.18em;
-}
 
 /* ===================================
    드래그 힌트 (페이드아웃)
@@ -193,7 +155,7 @@ body.is-dragging #title-block {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.3);
@@ -237,7 +199,7 @@ body.is-dragging #title-block {
   overflow: visible;
 }
 #badge svg text {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 9.5px;
   font-weight: 700;
   fill: rgba(255, 255, 255, 0.28);
@@ -286,7 +248,7 @@ body.is-dragging #title-block {
 .img-item .img-label {
   display: block;
   margin-top: 9px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 11px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.35);
@@ -297,13 +259,6 @@ body.is-dragging #title-block {
   pointer-events: none;
 }
 
-.img-item:hover img {
-  border-color: var(--item-color);
-  box-shadow: 0 0 0 3px var(--item-color),
-              0 24px 60px rgba(0, 0, 0, 0.6);
-  transform: scale(1.05);
-}
-.img-item:hover .img-label { color: var(--item-color); }
 
 /* ===================================
    아이콘 아이템
@@ -318,10 +273,17 @@ body.is-dragging #title-block {
   filter: brightness(0) invert(1);
   transition: opacity 0.3s, transform 0.3s, filter 0.3s;
 }
-.icon-item:hover img {
-  opacity: 1;
-  transform: scale(1.15);
-  filter: none;
+
+/* ===================================
+   스티커 아이템
+=================================== */
+.sticker-item img {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  /* 원본 색상 유지 — invert 없음 */
 }
 
 /* ===================================
@@ -329,7 +291,8 @@ body.is-dragging #title-block {
 =================================== */
 .text-item {
   --item-color: var(--red);
-  font-family: 'Black Han Sans', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
+  font-weight: 800;
   font-size: clamp(32px, 4vw, 66px);
   line-height: 1;
   white-space: nowrap;
@@ -355,15 +318,13 @@ body.is-dragging #title-block {
   transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1);
   z-index: -1;
 }
-.text-item:hover span { color: #0D0D0D; }
-.text-item:hover span::before { transform: translateY(0); }
 
 /* ===================================
    장식 텍스트 (클릭 불가 장식용)
 =================================== */
 .deco-item {
-  font-family: 'Space Grotesk', sans-serif;
-  font-weight: 900;
+  font-family: 'Nanum Square Round', sans-serif;
+  font-weight: 800;
   color: rgba(255, 255, 255, 0.06);
   white-space: nowrap;
   pointer-events: none;

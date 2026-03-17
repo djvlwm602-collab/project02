@@ -28,7 +28,7 @@ html {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   opacity: 0;
@@ -69,7 +69,7 @@ body.ready {
   gap: 10px;
   text-decoration: none;
   color: var(--text);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -92,7 +92,7 @@ body.ready {
 
 /* 헤더 태그 뱃지 */
 #header-tag {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
@@ -137,7 +137,8 @@ body.ready {
 }
 
 #hero-title {
-  font-family: 'Black Han Sans', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
+  font-weight: 800;
   font-size: clamp(52px, 7.5vw, 100px);
   line-height: 0.95;
   color: var(--text);
@@ -150,7 +151,7 @@ body.ready {
 }
 
 #hero-count {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: var(--muted);
@@ -188,7 +189,7 @@ body.ready {
   border-radius: 100px;
   background: transparent;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -277,7 +278,7 @@ body.ready {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(6px);
   color: #fff;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 11px;
   font-weight: 700;
   padding: 5px 10px;
@@ -305,7 +306,7 @@ body.ready {
   display: flex;
   align-items: center;
   gap: 5px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -326,7 +327,7 @@ body.ready {
   display: flex;
   align-items: center;
   gap: 4px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: var(--muted);
@@ -334,7 +335,7 @@ body.ready {
 
 /* 식당 이름 */
 .card-name {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 17px;
   font-weight: 700;
   color: var(--text);
@@ -381,7 +382,7 @@ body.ready {
 }
 
 .card-price {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Nanum Square Round', sans-serif;
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
