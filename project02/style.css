@@ -177,45 +177,6 @@ body.is-dragging #cursor-follower {
 }
 
 /* ===================================
-   회전 배지 (우하단)
-=================================== */
-#badge {
-  position: fixed;
-  bottom: 36px;
-  right: 36px;
-  width: 96px;
-  height: 96px;
-  z-index: 30;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#badge svg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  animation: badge-spin 14s linear infinite;
-  overflow: visible;
-}
-#badge svg text {
-  font-family: 'Nanum Square Round', sans-serif;
-  font-size: 9.5px;
-  font-weight: 700;
-  fill: rgba(255, 255, 255, 0.28);
-  letter-spacing: 2.5px;
-}
-.badge-star {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.4);
-  z-index: 1;
-}
-@keyframes badge-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* ===================================
    월드 요소 공통
 =================================== */
 .float-item {
@@ -247,13 +208,13 @@ body.is-dragging #cursor-follower {
 
 .img-item .img-label {
   display: block;
-  margin-top: 9px;
+  margin-top: 10px;
   font-family: 'Nanum Square Round', sans-serif;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.35);
   text-align: center;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   transition: color 0.3s;
   pointer-events: none;
@@ -293,7 +254,7 @@ body.is-dragging #cursor-follower {
   --item-color: var(--red);
   font-family: 'Nanum Square Round', sans-serif;
   font-weight: 800;
-  font-size: clamp(32px, 4vw, 66px);
+  font-size: clamp(44px, 5vw, 82px);
   line-height: 1;
   white-space: nowrap;
   z-index: 11;

@@ -72,31 +72,33 @@ tickCursorRing();
 const ITEMS_BASE = [
   /* ── 음식 이미지 ── */
   /* 로고 안전 구역: 중앙 x≈350~1050, y≈200~720 → 이 범위를 피해 배치 */
-  { type: 'image', tag: '한식',      x:   60, y:   80, rot: -5, size: 200, phase: 0.0 }, /* 좌측 확보 */
-  { type: 'image', tag: '양식',      x: 1250, y:   55, rot:  4, size: 185, phase: 1.2 }, /* 로고 우측 여유 */
-  { type: 'image', tag: '일식',      x: 2380, y:  140, rot: -3, size: 210, phase: 2.4 },
-  { type: 'image', tag: '분식',      x:  100, y: 1080, rot:  6, size: 190, phase: 0.8 },
-  { type: 'image', tag: '디저트',    x: 1380, y: 1490, rot: -7, size: 175, phase: 1.6 },
-  { type: 'image', tag: '카페',      x:   55, y:  460, rot: -4, size: 195, phase: 0.4 }, /* 로고 좌측 아래로 이동 */
-  { type: 'image', tag: '패스트푸드', x: 2100, y:  400, rot:  3, size: 185, phase: 1.3 },
-  { type: 'image', tag: '야식',      x: 1680, y:  750, rot: -6, size: 200, phase: 2.5 },
-  { type: 'image', tag: '고기',      x:  300, y:  900, rot:  5, size: 205, phase: 0.9 },
-  { type: 'image', tag: '아시안',    x: 2400, y: 1350, rot: -2, size: 190, phase: 1.8 },
+  /* 이미지 크기 230~240px, 텍스트 높이 ~90px 기준으로 겹침 없이 배치 */
+  { type: 'image', tag: '한식',       x:   60, y:   70, rot: -5, size: 230, phase: 0.0 }, /* 좌상단 */
+  { type: 'image', tag: '양식',       x: 1100, y:   45, rot:  4, size: 215, phase: 1.2 }, /* 느끼·혼밥 사이 여유 확보 */
+  { type: 'image', tag: '일식',       x: 2370, y:  130, rot: -3, size: 240, phase: 2.4 }, /* 우상단 */
+  { type: 'image', tag: '분식',       x:   80, y: 1100, rot:  6, size: 220, phase: 0.8 }, /* 좌하단 — 고기와 x 분리 */
+  { type: 'image', tag: '디저트',     x: 1370, y: 1470, rot: -7, size: 205, phase: 1.6 }, /* 하단 중앙 */
+  { type: 'image', tag: '카페',       x:   60, y:  470, rot: -4, size: 225, phase: 0.4 }, /* 매콤 아래, 플렉스 위 */
+  { type: 'image', tag: '패스트푸드', x: 2080, y:  390, rot:  3, size: 215, phase: 1.3 }, /* 우측 중상단 */
+  { type: 'image', tag: '야식',       x: 1660, y:  750, rot: -6, size: 230, phase: 2.5 }, /* 가성비 아래 */
+  { type: 'image', tag: '고기',       x:  310, y:  880, rot:  5, size: 235, phase: 0.9 }, /* 플렉스 아래, 분식과 x 분리 */
+  { type: 'image', tag: '아시안',     x: 2390, y: 1340, rot: -2, size: 220, phase: 1.8 }, /* 우하단 */
 
   /* ── 스티커 이미지 (장식용) ── */
-  { type: 'sticker', src: 'img/icon/img002.png', x:  720, y:  750, rot: -8, size: 120, phase: 0.6 }, /* 로고 아래로 이동 */
-  { type: 'sticker', src: 'img/icon/img003.png', x: 1540, y:  290, rot:  6, size: 110, phase: 1.7 },
-  { type: 'sticker', src: 'img/icon/img004.png', x:  900, y: 1270, rot: -5, size: 125, phase: 2.8 },
-  { type: 'sticker', src: 'img/icon/img005.png', x: 2190, y: 1090, rot:  9, size: 115, phase: 0.2 },
-  { type: 'sticker', src: 'img/icon/img006.png', x:  460, y: 1650, rot: -7, size: 120, phase: 2.1 },
+  { type: 'sticker', src: 'img/icon/img002.png', x:  720, y:  750, rot: -8, size: 140, phase: 0.6 }, /* 중앙 아래 */
+  { type: 'sticker', src: 'img/icon/img003.png', x: 1540, y:  285, rot:  6, size: 130, phase: 1.7 }, /* 혼밥 아래, 야식 위 */
+  { type: 'sticker', src: 'img/icon/img004.png', x:  890, y: 1260, rot: -5, size: 145, phase: 2.8 }, /* 하단 좌중 */
+  { type: 'sticker', src: 'img/icon/img005.png', x: 2180, y: 1080, rot:  9, size: 130, phase: 0.2 }, /* 로컬맛집 우측 */
+  { type: 'sticker', src: 'img/icon/img006.png', x:  450, y: 1640, rot: -7, size: 140, phase: 2.1 }, /* 좌하단 */
 
   /* ── 무드 키워드 텍스트 ── */
-  { type: 'text', tag: '매콤',     x:   20, y:  370, rot: -2, phase: 0.3 },
-  { type: 'text', tag: '느끼',     x:  810, y:   38, rot:  1, phase: 1.5 },
-  { type: 'text', tag: '가성비',   x: 1880, y:  590, rot: -3, phase: 2.2 },
-  { type: 'text', tag: '플렉스',   x:   20, y:  810, rot:  2, phase: 0.7 },
-  { type: 'text', tag: '혼밥',     x: 1350, y:  160, rot: -1, phase: 1.9 },
-  { type: 'text', tag: '로컬맛집', x: 1740, y: 1080, rot:  3, phase: 3.1 },
+  /* 폰트 ~82px 기준 높이 ~90px, 너비: 2자≈175px, 3자≈245px, 4자≈315px */
+  { type: 'text', tag: '매콤',     x:   28, y:  340, rot: -2, phase: 0.3 }, /* 한식 아래, 카페 위 */
+  { type: 'text', tag: '느끼',     x:  800, y:   38, rot:  1, phase: 1.5 }, /* 양식 좌측 여유 확보 */
+  { type: 'text', tag: '가성비',   x: 1650, y:  590, rot: -3, phase: 2.2 }, /* 패스트푸드·야식 사이 */
+  { type: 'text', tag: '플렉스',   x:   28, y:  820, rot:  2, phase: 0.7 }, /* 카페 아래, 고기와 x 분리 */
+  { type: 'text', tag: '혼밥',     x: 1460, y:   55, rot: -1, phase: 1.9 }, /* 양식 우측, x간격 140px */
+  { type: 'text', tag: '로컬맛집', x: 1720, y: 1065, rot:  3, phase: 3.1 }, /* 야식 아래, 디저트 위 */
 
 ];
 
