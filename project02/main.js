@@ -127,7 +127,7 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
       if (cfg.type === 'image') {
         el.className += ' img-item';
         el.style.width = cfg.size + 'px';
-        el.innerHTML = `<img src="${meta.image}" alt="${cfg.tag}" draggable="false">`;
+        el.innerHTML = `<img src="${meta.image}" alt="${cfg.tag}" draggable="false"><span class="img-label">${cfg.tag}</span>`;
       }
       else if (cfg.type === 'icon') {
         el.className += ' img-item icon-item';
@@ -218,7 +218,6 @@ canvasEl.addEventListener('pointerdown', e => {
   startPtrY  = e.clientY;
   velX = 0;
   velY = 0;
-  canvasEl.setPointerCapture(e.pointerId);
   document.body.classList.add('is-dragging');
   hideDragHint();
 });
