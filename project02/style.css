@@ -202,7 +202,7 @@ body.is-dragging {
 /* 이미지 줌인 시 넘치는 부분을 잘라내는 래퍼 */
 .img-item .img-wrap {
   position: relative;
-  border-radius: 22px;
+  border-radius: 44px;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
               box-shadow 0.4s ease;
@@ -218,7 +218,7 @@ body.is-dragging {
   width: 100%;
   aspect-ratio: 6 / 5;
   object-fit: cover;
-  border-radius: 22px;
+  border-radius: 44px;
   display: block;
   border: 2px solid transparent;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -235,7 +235,7 @@ body.is-dragging {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0);
-  border-radius: 22px;
+  border-radius: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -310,19 +310,18 @@ body.is-dragging {
   padding: 4px 16px 7px;
   color: var(--white);
   position: relative;
-  overflow: hidden;
-  transition: color 0.25s ease;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: border-color 0.25s ease;
 }
 
-/* 호버 시 배경 색상 슬라이드업 */
+/* 호버 시 텍스트 라인만 표시 */
+.text-item:hover span {
+  border-bottom-color: var(--white);
+}
+
 .text-item span::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--item-color);
-  transform: translateY(103%);
-  transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1);
-  z-index: -1;
+  content: none;
 }
 
 /* ===================================
