@@ -49,7 +49,6 @@ body.ready {
   background: rgba(244, 244, 240, 0.9);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
 }
 
 .header-inner {
@@ -129,17 +128,13 @@ body.ready {
 }
 
 #hero-eyebrow::before {
-  content: '';
-  display: inline-block;
-  width: 20px;
-  height: 2px;
-  background: var(--accent);
+  content: none;
 }
 
 #hero-title {
   font-family: 'Nanum Square Round', sans-serif;
   font-weight: 800;
-  font-size: clamp(52px, 7.5vw, 100px);
+  font-size: clamp(47px, 6.75vw, 90px);
   line-height: 0.95;
   color: var(--text);
   margin-bottom: 22px;
@@ -152,7 +147,7 @@ body.ready {
 
 #hero-count {
   font-family: 'Nanum Square Round', sans-serif;
-  font-size: 13px;
+  font-size: 20px;
   font-weight: 500;
   color: var(--muted);
 }
@@ -167,7 +162,6 @@ body.ready {
   background: rgba(244, 244, 240, 0.9);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
 }
 
 .sort-inner {
@@ -184,13 +178,13 @@ body.ready {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 8px 18px;
+  padding: 9px 20px;
   border: 1.5px solid var(--border);
   border-radius: 100px;
   background: transparent;
   color: var(--muted);
   font-family: 'Nanum Square Round', sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: border-color 0.2s, color 0.2s, background 0.2s;

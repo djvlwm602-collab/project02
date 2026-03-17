@@ -15,7 +15,7 @@ let   currentSort = 'distance';
    태그 색상 가져오기 (카테고리 또는 무드)
 =================================== */
 function getTagColor(tag) {
-  return (CATEGORIES[tag] || MOODS[tag] || {}).color || '#111111';
+  return '#F8481C';
 }
 
 /* ===================================
@@ -148,7 +148,7 @@ function initHeader() {
   const heroTitle  = document.getElementById('hero-title');
   heroTitle.innerHTML = `<span class="tag-word">${selectedTag}</span> 맛집`;
 
-  document.getElementById('hero-eyebrow').textContent = '지금 당신에게 딱 맞는';
+  document.getElementById('hero-eyebrow').textContent = '';
 }
 
 /* ===================================
