@@ -73,16 +73,16 @@ const ITEMS_BASE = [
   /* ── 음식 이미지 ── */
   /* 로고 안전 구역: 중앙 x≈350~1050, y≈200~720 → 이 범위를 피해 배치 */
   /* 이미지 크기 230~240px, 텍스트 높이 ~90px 기준으로 겹침 없이 배치 */
-  { type: 'image', tag: '한식',       x:   60, y:   70, rot: -5, size: 230, phase: 0.0 }, /* 좌상단 */
-  { type: 'image', tag: '양식',       x: 1100, y:   45, rot:  4, size: 215, phase: 1.2 }, /* 느끼·혼밥 사이 여유 확보 */
-  { type: 'image', tag: '일식',       x: 2370, y:  130, rot: -3, size: 240, phase: 2.4 }, /* 우상단 */
-  { type: 'image', tag: '분식',       x:   80, y: 1100, rot:  6, size: 220, phase: 0.8 }, /* 좌하단 — 고기와 x 분리 */
-  { type: 'image', tag: '디저트',     x: 1370, y: 1470, rot: -7, size: 205, phase: 1.6 }, /* 하단 중앙 */
-  { type: 'image', tag: '카페',       x:   60, y:  470, rot: -4, size: 225, phase: 0.4 }, /* 매콤 아래, 플렉스 위 */
-  { type: 'image', tag: '패스트푸드', x: 2080, y:  390, rot:  3, size: 215, phase: 1.3 }, /* 우측 중상단 */
-  { type: 'image', tag: '야식',       x: 1660, y:  750, rot: -6, size: 230, phase: 2.5 }, /* 가성비 아래 */
-  { type: 'image', tag: '고기',       x:  310, y:  880, rot:  5, size: 235, phase: 0.9 }, /* 플렉스 아래, 분식과 x 분리 */
-  { type: 'image', tag: '아시안',     x: 2390, y: 1340, rot: -2, size: 220, phase: 1.8 }, /* 우하단 */
+  { type: 'image', tag: '한식',       x:   60, y:   70, rot:  0, size: 253, phase: 0.0 }, /* 좌상단 */
+  { type: 'image', tag: '양식',       x: 1100, y:   45, rot:  0, size: 237, phase: 1.2 }, /* 느끼·혼밥 사이 여유 확보 */
+  { type: 'image', tag: '일식',       x: 2370, y:  130, rot:  0, size: 264, phase: 2.4 }, /* 우상단 */
+  { type: 'image', tag: '분식',       x:   80, y: 1100, rot:  0, size: 242, phase: 0.8 }, /* 좌하단 — 고기와 x 분리 */
+  { type: 'image', tag: '디저트',     x: 1370, y: 1470, rot:  0, size: 226, phase: 1.6 }, /* 하단 중앙 */
+  { type: 'image', tag: '카페',       x:   60, y:  470, rot:  0, size: 248, phase: 0.4 }, /* 매콤 아래, 플렉스 위 */
+  { type: 'image', tag: '패스트푸드', x: 2080, y:  390, rot:  0, size: 237, phase: 1.3 }, /* 우측 중상단 */
+  { type: 'image', tag: '야식',       x: 1660, y:  750, rot:  0, size: 253, phase: 2.5 }, /* 가성비 아래 */
+  { type: 'image', tag: '고기',       x:  310, y:  880, rot:  0, size: 259, phase: 0.9 }, /* 플렉스 아래, 분식과 x 분리 */
+  { type: 'image', tag: '아시안',     x: 2390, y: 1340, rot:  0, size: 242, phase: 1.8 }, /* 우하단 */
 
   /* ── 스티커 이미지 (장식용) ── */
   { type: 'sticker', src: 'img/icon/img002.png', x:  720, y:  750, rot: -8, size:  98, phase: 0.6 }, /* 중앙 아래 */
