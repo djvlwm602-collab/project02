@@ -23,12 +23,16 @@ const GRID   = 3;   /* 3×3 = 9 타일 */
 /* ─────────────────────────────────────────────
    2. 캔버스 상태
 ───────────────────────────────────────────── */
-let offsetX     = TILE_W;  /* 초기 오프셋 = 중앙 타일 시작 */
+let offsetX     = TILE_W;  /* 현재 오프셋 */
 let offsetY     = TILE_H;
-let velX        = 0;       /* 관성 속도 */
+let targetX     = TILE_W;  /* 휠 목표 오프셋 — lerp로 접근 */
+let targetY     = TILE_H;
+const EASE      = 0.08;    /* iheartcomix 방식 lerp 강도 */
+
+let velX        = 0;       /* 드래그 관성 속도 */
 let velY        = 0;
-const FRICTION  = 0.88;    /* 감쇠 계수 — 낮을수록 빨리 멈춤 */
-const MIN_VEL   = 0.4;     /* 이 속도 이하면 정지 */
+const FRICTION  = 0.88;
+const MIN_VEL   = 0.4;
 
 let isDragging  = false;
 let lastPtrX    = 0;
@@ -259,9 +263,11 @@ canvasEl.addEventListener('pointermove', e => {
   velX = -dx;
   velY = -dy;
 
-  /* 오프셋 즉시 이동 */
+  /* 드래그는 즉시 반응 — offset과 target 동시 이동 (lerp 충돌 방지) */
   offsetX -= dx;
   offsetY -= dy;
+  targetX  = offsetX;
+  targetY  = offsetY;
 
   lastPtrX = e.clientX;
   lastPtrY = e.clientY;
@@ -285,16 +291,26 @@ canvasEl.addEventListener('pointercancel', () => {
 });
 
 /* ─────────────────────────────────────────────
-   7. 마우스 휠 — 양방향 패닝 + 관성 추가
+   7. 마우스 휠 — 양방향 패닝
+   - 트랙패드: deltaX·deltaY 그대로 반영
+   - 마우스 휠: 세로 스크롤 / Shift+휠: 가로 스크롤
 ───────────────────────────────────────────── */
 canvasEl.addEventListener('wheel', e => {
   e.preventDefault();
-  /* 트랙패드의 경우 deltaX(좌우)도 그대로 반영 */
-  offsetX += e.deltaX;
-  offsetY += e.deltaY;
-  /* 휠 관성 — 현재 속도에 누적 */
-  velX = e.deltaX * 0.4;
-  velY = e.deltaY * 0.4;
+
+  let dx = e.deltaX;
+  let dy = e.deltaY;
+
+  /* Shift+휠 → 가로 이동 (마우스 휠 사용 시) */
+  if (e.shiftKey && dx === 0) {
+    dx = dy;
+    dy = 0;
+  }
+
+  /* iheartcomix 방식: 현재 오프셋이 아닌 target에 누적
+     → tick에서 lerp로 부드럽게 따라옴 */
+  targetX += dx;
+  targetY += dy;
   hideDragHint();
 }, { passive: false });
 
@@ -304,13 +320,12 @@ canvasEl.addEventListener('wheel', e => {
    시각적으로 동일한 타일이 복사돼 있어 사용자가 알 수 없음
 ───────────────────────────────────────────── */
 function wrapOffset() {
-  /* offsetX < TILE_W  → 왼쪽 끝에 가까워짐: 오른쪽 타일로 순간이동 */
-  if (offsetX < TILE_W)       offsetX += TILE_W;
-  /* offsetX >= 2*TILE_W → 오른쪽 끝: 왼쪽 타일로 */
-  else if (offsetX >= TILE_W * 2) offsetX -= TILE_W;
+  /* offset과 target 동시에 wrap — 순간이동 시 lerp 튐 방지 */
+  if (offsetX < TILE_W)           { offsetX += TILE_W; targetX += TILE_W; }
+  else if (offsetX >= TILE_W * 2) { offsetX -= TILE_W; targetX -= TILE_W; }
 
-  if (offsetY < TILE_H)       offsetY += TILE_H;
-  else if (offsetY >= TILE_H * 2) offsetY -= TILE_H;
+  if (offsetY < TILE_H)           { offsetY += TILE_H; targetY += TILE_H; }
+  else if (offsetY >= TILE_H * 2) { offsetY -= TILE_H; targetY -= TILE_H; }
 }
 
 /* ─────────────────────────────────────────────
@@ -358,15 +373,19 @@ function tick() {
   time += 0.007;
   frameCount++;
 
-  /* 관성 — 드래그 중이 아닐 때 속도 감쇠 */
   if (!isDragging) {
+    /* 드래그 관성 — target에 누적해 lerp가 이어받음 */
     velX *= FRICTION;
     velY *= FRICTION;
     if (Math.abs(velX) < MIN_VEL) velX = 0;
     if (Math.abs(velY) < MIN_VEL) velY = 0;
-    offsetX += velX;
-    offsetY += velY;
+    targetX += velX;
+    targetY += velY;
   }
+
+  /* iheartcomix lerp — 현재 오프셋을 target으로 부드럽게 끌어당김 */
+  offsetX += (targetX - offsetX) * EASE;
+  offsetY += (targetY - offsetY) * EASE;
 
   /* 무한 루프 Wrap */
   wrapOffset();

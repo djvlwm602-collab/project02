@@ -28,9 +28,14 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: var(--bg);
-  cursor: default;
+  cursor: grab;
   -webkit-font-smoothing: antialiased;
   user-select: none; /* 드래그 중 텍스트 선택 방지 */
+}
+
+/* 드래그 중 grabbing 커서 */
+body.is-dragging {
+  cursor: grabbing;
 }
 
 /* ===================================
@@ -178,7 +183,7 @@ html, body {
 =================================== */
 .float-item {
   position: absolute;
-  cursor: default;
+  cursor: pointer;
   will-change: transform;
   z-index: 10;
   /* 초기 투명 — JS가 visible 클래스 추가 */
