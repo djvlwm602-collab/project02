@@ -85,11 +85,11 @@ const ITEMS_BASE = [
   { type: 'image', tag: '아시안',     x: 2390, y: 1340, rot: -2, size: 220, phase: 1.8 }, /* 우하단 */
 
   /* ── 스티커 이미지 (장식용) ── */
-  { type: 'sticker', src: 'img/icon/img002.png', x:  720, y:  750, rot: -8, size: 140, phase: 0.6 }, /* 중앙 아래 */
-  { type: 'sticker', src: 'img/icon/img003.png', x: 1540, y:  285, rot:  6, size: 130, phase: 1.7 }, /* 혼밥 아래, 야식 위 */
-  { type: 'sticker', src: 'img/icon/img004.png', x:  890, y: 1260, rot: -5, size: 145, phase: 2.8 }, /* 하단 좌중 */
-  { type: 'sticker', src: 'img/icon/img005.png', x: 2180, y: 1080, rot:  9, size: 130, phase: 0.2 }, /* 로컬맛집 우측 */
-  { type: 'sticker', src: 'img/icon/img006.png', x:  450, y: 1640, rot: -7, size: 140, phase: 2.1 }, /* 좌하단 */
+  { type: 'sticker', src: 'img/icon/img002.png', x:  720, y:  750, rot: -8, size:  98, phase: 0.6 }, /* 중앙 아래 */
+  { type: 'sticker', src: 'img/icon/img003.png', x: 1540, y:  285, rot:  6, size:  91, phase: 1.7 }, /* 혼밥 아래, 야식 위 */
+  { type: 'sticker', src: 'img/icon/img004.png', x:  890, y: 1260, rot: -5, size: 102, phase: 2.8 }, /* 하단 좌중 */
+  { type: 'sticker', src: 'img/icon/img005.png', x: 2180, y: 1080, rot:  9, size:  91, phase: 0.2 }, /* 로컬맛집 우측 */
+  { type: 'sticker', src: 'img/icon/img006.png', x:  450, y: 1640, rot: -7, size:  98, phase: 2.1 }, /* 좌하단 */
 
   /* ── 무드 키워드 텍스트 ── */
   /* 폰트 ~82px 기준 높이 ~90px, 너비: 2자≈175px, 3자≈245px, 4자≈315px */
@@ -176,7 +176,7 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
    ITEMS_BASE와 별도로 동적 좌표를 계산해
    중앙 타일(1,1) 기준 위치를 설정
 ───────────────────────────────────────────── */
-const LOGO_W    = 570;
+const LOGO_W    = 620;
 const LOGO_H    = Math.round(LOGO_W * 0.62); /* PNG 비율 추정 */
 /* 타일 좌표 = 스크린 좌표 (초기 오프셋이 TILE_W, TILE_H이므로 1:1 대응) */
 const logoTileX = Math.round(window.innerWidth  / 2 - LOGO_W / 2);
