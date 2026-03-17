@@ -103,12 +103,12 @@ const ITEMS_BASE = [
 
   /* ── 무드 키워드 텍스트 ── */
   /* 폰트 ~82px 기준 높이 ~90px, 너비: 2자≈175px, 3자≈245px, 4자≈315px */
-  { type: 'text', tag: '매콤',     x:   28, y:  340, rot: -2, phase: 0.3 }, /* 한식 아래, 카페 위 */
-  { type: 'text', tag: '느끼',     x:  800, y:   38, rot:  1, phase: 1.5 }, /* 양식 좌측 여유 확보 */
-  { type: 'text', tag: '가성비',   x: 1650, y:  590, rot: -3, phase: 2.2 }, /* 패스트푸드·야식 사이 */
-  { type: 'text', tag: '플렉스',   x:   28, y:  820, rot:  2, phase: 0.7 }, /* 카페 아래, 고기와 x 분리 */
-  { type: 'text', tag: '혼밥',     x: 1460, y:   55, rot: -1, phase: 1.9 }, /* 양식 우측, x간격 140px */
-  { type: 'text', tag: '로컬맛집', x: 1720, y: 1065, rot:  3, phase: 3.1 }, /* 야식 아래, 디저트 위 */
+  { type: 'text', tag: '매콤',     x:   28, y:  340, rot:  0, phase: 0.3 }, /* 한식 아래, 카페 위 */
+  { type: 'text', tag: '느끼',     x:  800, y:   38, rot:  0, phase: 1.5 }, /* 양식 좌측 여유 확보 */
+  { type: 'text', tag: '가성비',   x: 1650, y:  590, rot:  0, phase: 2.2 }, /* 패스트푸드·야식 사이 */
+  { type: 'text', tag: '플렉스',   x:   28, y:  820, rot:  0, phase: 0.7 }, /* 카페 아래, 고기와 x 분리 */
+  { type: 'text', tag: '혼밥',     x: 1460, y:   55, rot:  0, phase: 1.9 }, /* 양식 우측, x간격 140px */
+  { type: 'text', tag: '로컬맛집', x: 1720, y: 1065, rot:  0, phase: 3.1 }, /* 야식 아래, 디저트 위 */
 
 ];
 
@@ -137,7 +137,7 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
       if (cfg.type === 'image') {
         el.className += ' img-item';
         el.style.width = cfg.size + 'px';
-        el.innerHTML = `<img src="${meta.image}" alt="${cfg.tag}" draggable="false"><span class="img-label">${cfg.tag}</span>`;
+        el.innerHTML = `<div class="img-wrap"><img src="${meta.image}" alt="${cfg.tag}" draggable="false"><div class="img-overlay"><span class="img-overlay-text">${cfg.tag}</span></div></div>`;
       }
       else if (cfg.type === 'icon') {
         el.className += ' img-item icon-item';
@@ -176,7 +176,16 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
         setTimeout(() => el.classList.add('visible'), 350 + baseIdx * 80);
       }
 
-      allItems.push({ el, wx, wy, cfg, phase: cfg.phase });
+      /* 요소마다 랜덤 float 파라미터 — 각기 다른 리듬 */
+      allItems.push({
+        el, wx, wy, cfg,
+        phaseY: cfg.phase,
+        phaseX: Math.random() * Math.PI * 2,
+        freqY:  0.35 + Math.random() * 0.45,  /* 느린 주파수 */
+        freqX:  0.25 + Math.random() * 0.35,
+        ampY:   6  + Math.random() * 9,
+        ampX:   4  + Math.random() * 7,
+      });
     }
   }
 });
@@ -210,7 +219,15 @@ for (let gy = 0; gy < GRID; gy++) {
     /* 중앙 타일은 즉시 표시 — 다른 타일은 가상화가 관리 */
     if (gx === 1 && gy === 1) el.classList.add('visible');
 
-    allItems.push({ el, wx, wy, cfg: logoCfg, phase: logoCfg.phase });
+    allItems.push({
+      el, wx, wy, cfg: logoCfg,
+      phaseY: logoCfg.phase,
+      phaseX: Math.random() * Math.PI * 2,
+      freqY:  0.35 + Math.random() * 0.45,
+      freqX:  0.25 + Math.random() * 0.35,
+      ampY:   5  + Math.random() * 7,
+      ampX:   3  + Math.random() * 5,
+    });
   }
 }
 
@@ -357,11 +374,12 @@ function tick() {
   /* 캔버스 월드 이동 */
   worldEl.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
 
-  /* 요소별 부유(bob) 애니메이션 */
-  allItems.forEach(({ el, cfg, phase }) => {
+  /* 요소별 X·Y 부유 애니메이션 — 각기 다른 주파수·진폭으로 자연스러운 리듬 */
+  allItems.forEach(({ el, cfg, phaseY, phaseX, freqY, freqX, ampY, ampX }) => {
     if (el.style.display === 'none') return;
-    const bob = Math.sin(time + phase) * 9;
-    el.style.transform = `translateY(${bob}px) rotate(${cfg.rot}deg)`;
+    const floatY = Math.sin(time * freqY + phaseY) * ampY;
+    const floatX = Math.sin(time * freqX + phaseX) * ampX;
+    el.style.transform = `translate(${floatX}px, ${floatY}px) rotate(${cfg.rot}deg)`;
   });
 
   /* 가시성 업데이트 — 4프레임마다 */

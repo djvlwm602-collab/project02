@@ -192,6 +192,21 @@ html, body {
 =================================== */
 .img-item { --item-color: var(--red); }
 
+/* 이미지 줌인 시 넘치는 부분을 잘라내는 래퍼 */
+.img-item .img-wrap {
+  position: relative;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.4s ease;
+}
+
+/* 호버 시 카드 전체 살짝 확대 */
+.img-item:hover .img-wrap {
+  transform: scale(1.06);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55);
+}
+
 .img-item img {
   width: 100%;
   aspect-ratio: 6 / 5;
@@ -199,22 +214,48 @@ html, body {
   border-radius: 22px;
   display: block;
   border: 2px solid transparent;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   pointer-events: none; /* 부모가 받음 */
 }
 
-.img-item .img-label {
-  display: block;
-  margin-top: 10px;
-  font-family: 'Nanum Square Round', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.35);
-  text-align: center;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  transition: color 0.3s;
+/* 호버 시 내부 이미지 추가 줌인 */
+.img-item:hover img {
+  transform: scale(1.1);
+}
+
+/* 딤 오버레이 */
+.img-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.4s ease;
   pointer-events: none;
+}
+
+.img-item:hover .img-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* 오버레이 카테고리 텍스트 */
+.img-overlay-text {
+  font-family: 'Nanum Square Round', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.5vw, 52px);
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.img-item:hover .img-overlay-text {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 
