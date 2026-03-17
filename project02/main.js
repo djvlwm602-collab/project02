@@ -37,10 +37,10 @@ const MIN_VEL   = 0.4;
 /* 마우스 위치 기반 오토팬 속도 (관성 포함) */
 let autoVelX    = 0;
 let autoVelY    = 0;
-const AUTO_MAX     = 9.0;   /* 최대 속도 px/frame */
-const AUTO_DEAD    = 0.12;  /* 중앙 데드존 비율 */
-const AUTO_ACCEL   = 0.05;  /* 속도 변화 부드러움 */
-const AUTO_INERTIA = 0.90;  /* 데드존 진입 시 감속 계수 */
+const AUTO_MAX     = 3.2;   /* 최대 속도 px/frame — 절제된 이동 */
+const AUTO_DEAD    = 0.18;  /* 중앙 데드존 비율 — 넓혀서 안정감 확보 */
+const AUTO_ACCEL   = 0.03;  /* 속도 변화 부드러움 — 천천히 가속 */
+const AUTO_INERTIA = 0.94;  /* 데드존 진입 시 감속 계수 — 길게 여운 */
 
 let isDragging  = false;
 let lastPtrX    = 0;
@@ -427,15 +427,15 @@ function tick() {
   /* 무한 루프 Wrap */
   wrapOffset();
 
-  /* 캔버스 월드 이동 */
-  worldEl.style.transform = `translate(${-offsetX}px, ${-offsetY}px)`;
+  /* 캔버스 월드 이동 — translate3d로 GPU 레이어 강제 적용 (끊김 방지) */
+  worldEl.style.transform = `translate3d(${-offsetX}px, ${-offsetY}px, 0)`;
 
   /* 요소별 X·Y 부유 애니메이션 — 각기 다른 주파수·진폭으로 자연스러운 리듬 */
   allItems.forEach(({ el, cfg, phaseY, phaseX, freqY, freqX, ampY, ampX }) => {
     if (el.style.display === 'none') return;
     const floatY = Math.sin(time * freqY + phaseY) * ampY;
     const floatX = Math.sin(time * freqX + phaseX) * ampX;
-    el.style.transform = `translate(${floatX}px, ${floatY}px) rotate(${cfg.rot}deg)`;
+    el.style.transform = `translate3d(${floatX}px, ${floatY}px, 0) rotate(${cfg.rot}deg)`;
   });
 
   /* 가시성 업데이트 — 4프레임마다 */

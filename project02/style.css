@@ -109,8 +109,9 @@ body.is-dragging {
   position: absolute;
   top: 0;
   left: 0;
-  /* JS가 transform: translate() 로 오프셋 적용 */
+  /* JS가 transform: translate3d() 로 오프셋 적용 */
   will-change: transform;
+  transform: translate3d(0, 0, 0); /* GPU 레이어 초기화 */
   z-index: 5;
 }
 
@@ -185,6 +186,7 @@ body.is-dragging {
   position: absolute;
   cursor: pointer;
   will-change: transform;
+  transform: translate3d(0, 0, 0); /* GPU 레이어 초기화 — 끊김 방지 */
   z-index: 10;
   /* 초기 투명 — JS가 visible 클래스 추가 */
   opacity: 0;
