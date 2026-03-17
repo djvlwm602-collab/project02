@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘 뭐 먹지? — 맛집 탐색기</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700&family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 커스텀 커서 -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- 페이지 전환 오버레이 -->
+  <div id="page-transition" aria-hidden="true"></div>
+
+  <!-- ─────────────────────────────────────────
+       뷰포트 캔버스 (overflow hidden)
+       └── canvas-world: 드래그로 이동하는 월드
+  ───────────────────────────────────────── -->
+  <main id="canvas">
+
+    <!-- 배경 장식 텍스트 — 뷰포트에 고정 -->
+    <span class="bg-text bg-text-1" aria-hidden="true">FOOD</span>
+    <span class="bg-text bg-text-2" aria-hidden="true">FIND</span>
+
+    <!-- 무한 스크롤 월드 컨테이너 — JS가 transform 조작 -->
+    <div id="canvas-world" aria-label="탐색 캔버스"></div>
+
+  </main>
+
+  <!-- 타이틀 — position:fixed 로 뷰포트에 항상 고정 -->
+  <div id="title-block" aria-live="polite">
+    <h1 id="main-title">오늘<br>뭐 먹지<span class="accent">?</span></h1>
+    <p id="subtitle">드래그하거나 스크롤하여 탐색하세요</p>
+  </div>
+
+  <!-- 드래그 힌트 (처음 1회) -->
+  <div id="drag-hint" aria-hidden="true">
+    <span class="hint-icon">↔</span>
+    <span>드래그로 무한 탐색</span>
+  </div>
+
+  <!-- 회전 배지 (우하단) -->
+  <div id="badge" aria-hidden="true">
+    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <path id="badge-circle"
+          d="M 60,60 m -42,0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0"
+          fill="none"/>
+      </defs>
+      <text>
+        <textPath href="#badge-circle" startOffset="0%">
+          무한탐색 · INFINITE CANVAS · 오늘뭐먹지 ·&nbsp;
+        </textPath>
+      </text>
+    </svg>
+    <span class="badge-star">★</span>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

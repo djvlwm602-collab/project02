@@ -1,0 +1,389 @@
+/**
+ * Role: 메인 페이지 스타일 — iheartcomix 참고 무한 캔버스 + 다크/다이나믹 레이아웃
+ * Key Features: 커스텀 커서, 드래그 상태, 무한 캔버스 월드, 키워드 호버 애니메이션
+ */
+
+/* ===================================
+   기본 리셋 & CSS 변수
+=================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:     #0D0D0D;
+  --white:  #FFFFFF;
+  --red:    #FF142D;
+  --yellow: #FFD600;
+  --blue:   #3D7EFF;
+  --orange: #FF7A2B;
+  --green:  #00C77F;
+  --purple: #B870FF;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  user-select: none; /* 드래그 중 텍스트 선택 방지 */
+}
+
+/* ===================================
+   커스텀 커서
+=================================== */
+#cursor {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: var(--white);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: background 0.2s, width 0.18s, height 0.18s, transform 0.15s;
+}
+
+#cursor-follower {
+  position: fixed;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  /* 중심 맞추기 — margin 방식으로 크기 변경 시에도 중심 유지 */
+  margin: -22px 0 0 -22px;
+  transition: width 0.25s ease, height 0.25s ease,
+              margin 0.25s ease, border-color 0.25s ease, opacity 0.25s;
+}
+
+/* 호버 상태 */
+body.is-hovering #cursor {
+  width: 12px;
+  height: 12px;
+  background: var(--yellow);
+}
+body.is-hovering #cursor-follower {
+  width: 70px;
+  height: 70px;
+  margin: -35px 0 0 -35px;
+  border-color: var(--yellow);
+  border-width: 2px;
+}
+
+/* 드래그 상태 */
+body.is-dragging #cursor {
+  width: 14px;
+  height: 14px;
+  background: var(--white);
+  transform: translate(-50%, -50%) scale(0.8);
+}
+body.is-dragging #cursor-follower {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-color: rgba(255, 255, 255, 0.7);
+  border-width: 2px;
+}
+
+/* ===================================
+   캔버스 뷰포트
+=================================== */
+#canvas {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* 배경 그리드 패턴 */
+#canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===================================
+   무한 월드 컨테이너
+=================================== */
+#canvas-world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* JS가 transform: translate() 로 오프셋 적용 */
+  will-change: transform;
+  z-index: 5;
+}
+
+/* ===================================
+   배경 대형 텍스트 (고정 장식)
+=================================== */
+.bg-text {
+  position: absolute;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  font-size: 26vw;
+  color: rgba(255, 255, 255, 0.014);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+  z-index: 1;
+  letter-spacing: -0.03em;
+}
+.bg-text-1 { top: -4vw;    left: -1vw; }
+.bg-text-2 { bottom: -4vw; right: -1vw; }
+
+/* ===================================
+   중앙 타이틀 (뷰포트에 고정)
+=================================== */
+#title-block {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 20;
+  pointer-events: none;
+  /* 드래그 중 약간 투명 */
+  transition: opacity 0.3s;
+}
+
+body.is-dragging #title-block {
+  opacity: 0.35;
+}
+
+#main-title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(68px, 10.5vw, 144px);
+  line-height: 0.9;
+  color: var(--white);
+  letter-spacing: -0.01em;
+}
+
+#main-title .accent { color: var(--red); }
+
+#subtitle {
+  margin-top: 20px;
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: clamp(12px, 1vw, 15px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.36);
+  letter-spacing: 0.18em;
+}
+
+/* ===================================
+   드래그 힌트 (페이드아웃)
+=================================== */
+#drag-hint {
+  position: fixed;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.1em;
+  z-index: 30;
+  pointer-events: none;
+  transition: opacity 0.8s ease;
+}
+#drag-hint.hidden { opacity: 0; }
+
+.hint-icon {
+  font-size: 16px;
+  animation: hint-pulse 2s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 0.3; transform: translateX(0); }
+  50%       { opacity: 0.7; transform: translateX(4px); }
+}
+
+/* ===================================
+   회전 배지 (우하단)
+=================================== */
+#badge {
+  position: fixed;
+  bottom: 36px;
+  right: 36px;
+  width: 96px;
+  height: 96px;
+  z-index: 30;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#badge svg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  animation: badge-spin 14s linear infinite;
+  overflow: visible;
+}
+#badge svg text {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  fill: rgba(255, 255, 255, 0.28);
+  letter-spacing: 2.5px;
+}
+.badge-star {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 1;
+}
+@keyframes badge-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ===================================
+   월드 요소 공통
+=================================== */
+.float-item {
+  position: absolute;
+  cursor: none;
+  will-change: transform;
+  z-index: 10;
+  /* 초기 투명 — JS가 visible 클래스 추가 */
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.float-item.visible { opacity: 1; }
+
+/* ===================================
+   이미지 아이템
+=================================== */
+.img-item { --item-color: var(--red); }
+
+.img-item img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+  border: 2px solid transparent;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+  pointer-events: none; /* 부모가 받음 */
+}
+
+.img-item .img-label {
+  display: block;
+  margin-top: 9px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+  pointer-events: none;
+}
+
+.img-item:hover img {
+  border-color: var(--item-color);
+  box-shadow: 0 0 0 3px var(--item-color),
+              0 24px 60px rgba(0, 0, 0, 0.6);
+  transform: scale(1.05);
+}
+.img-item:hover .img-label { color: var(--item-color); }
+
+/* ===================================
+   아이콘 아이템
+=================================== */
+.icon-item img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+  border-radius: 10px;
+  opacity: 0.5;
+  filter: brightness(0) invert(1);
+  transition: opacity 0.3s, transform 0.3s, filter 0.3s;
+}
+.icon-item:hover img {
+  opacity: 1;
+  transform: scale(1.15);
+  filter: none;
+}
+
+/* ===================================
+   텍스트 키워드
+=================================== */
+.text-item {
+  --item-color: var(--red);
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(32px, 4vw, 66px);
+  line-height: 1;
+  white-space: nowrap;
+  z-index: 11;
+}
+
+.text-item span {
+  display: inline-block;
+  padding: 4px 16px 7px;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  transition: color 0.25s ease;
+}
+
+/* 호버 시 배경 색상 슬라이드업 */
+.text-item span::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--item-color);
+  transform: translateY(103%);
+  transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1);
+  z-index: -1;
+}
+.text-item:hover span { color: #0D0D0D; }
+.text-item:hover span::before { transform: translateY(0); }
+
+/* ===================================
+   장식 텍스트 (클릭 불가 장식용)
+=================================== */
+.deco-item {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.06);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+
+/* ===================================
+   페이지 전환 오버레이
+=================================== */
+#page-transition {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 9000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+#page-transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
