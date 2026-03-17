@@ -28,54 +28,51 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: var(--bg);
-  cursor: none;
+  cursor: default;
   -webkit-font-smoothing: antialiased;
   user-select: none; /* 드래그 중 텍스트 선택 방지 */
 }
 
 /* ===================================
-   커스텀 커서
+   커서 말풍선
 =================================== */
-#cursor {
+#cursor-bubble {
   position: fixed;
-  width: 8px;
-  height: 8px;
-  background: var(--white);
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  background: #ffffff;
+  color: #111111;
+  font-family: 'Nanum Square Round', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 10px 16px;
+  border-radius: 20px;
   pointer-events: none;
   z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: background 0.2s, width 0.18s, height 0.18s, transform 0.15s;
+  white-space: nowrap;
+  /* 커서 오른쪽 위에 위치 */
+  transform: translate(14px, calc(-100% - 10px));
+  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
 }
 
-#cursor-follower {
-  position: fixed;
-  width: 44px;
-  height: 44px;
-  border: 1.5px solid rgba(255, 255, 255, 0.45);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9998;
-  /* 중심 맞추기 — margin 방식으로 크기 변경 시에도 중심 유지 */
-  margin: -22px 0 0 -22px;
-  transition: width 0.25s ease, height 0.25s ease,
-              margin 0.25s ease, border-color 0.25s ease, opacity 0.25s;
+/* 말풍선 꼬리 — 왼쪽 아래 */
+#cursor-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 18px;
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 9px solid #ffffff;
 }
 
-
-/* 드래그 상태 */
-body.is-dragging #cursor {
-  width: 14px;
-  height: 14px;
-  background: var(--white);
-  transform: translate(-50%, -50%) scale(0.8);
-}
-body.is-dragging #cursor-follower {
-  width: 56px;
-  height: 56px;
-  margin: -28px 0 0 -28px;
-  border-color: rgba(255, 255, 255, 0.7);
-  border-width: 2px;
+/* 호버 시 숨김 */
+#cursor-bubble.hidden {
+  opacity: 0;
 }
 
 /* ===================================
@@ -181,7 +178,7 @@ body.is-dragging #cursor-follower {
 =================================== */
 .float-item {
   position: absolute;
-  cursor: none;
+  cursor: default;
   will-change: transform;
   z-index: 10;
   /* 초기 투명 — JS가 visible 클래스 추가 */

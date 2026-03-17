@@ -38,31 +38,41 @@ let startPtrY   = 0;
 let didDrag     = false;   /* true면 클릭 이벤트 무시 */
 
 /* ─────────────────────────────────────────────
-   3. 커서 추적
+   3. 말풍선 커서 추적
 ───────────────────────────────────────────── */
-const cursorDot  = document.getElementById('cursor');
-const cursorRing = document.getElementById('cursor-follower');
-let   mouseX     = window.innerWidth  / 2;
-let   mouseY     = window.innerHeight / 2;
-let   ringX      = mouseX;
-let   ringY      = mouseY;
+const bubbleEl = document.getElementById('cursor-bubble');
+let   bubbleX  = -300;
+let   bubbleY  = -300;
+let   targetX  = -300;
+let   targetY  = -300;
 
 document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-  cursorDot.style.left = mouseX + 'px';
-  cursorDot.style.top  = mouseY + 'px';
+  targetX = e.clientX;
+  targetY = e.clientY;
 });
 
-function tickCursorRing() {
-  /* lerp 보간으로 커서 링이 부드럽게 따라오도록 */
-  ringX += (mouseX - ringX) * 0.1;
-  ringY += (mouseY - ringY) * 0.1;
-  cursorRing.style.left = ringX + 'px';
-  cursorRing.style.top  = ringY + 'px';
-  requestAnimationFrame(tickCursorRing);
+/* 말풍선을 lerp로 부드럽게 따라오게 함 */
+function tickBubble() {
+  bubbleX += (targetX - bubbleX) * 0.18;
+  bubbleY += (targetY - bubbleY) * 0.18;
+  bubbleEl.style.left = bubbleX + 'px';
+  bubbleEl.style.top  = bubbleY + 'px';
+  requestAnimationFrame(tickBubble);
 }
-tickCursorRing();
+tickBubble();
+
+/* 이미지/텍스트 아이템 호버 시 말풍선 숨기기 — worldEl 선언 후 이벤트 등록 */
+function initBubbleHover() {
+  const w = document.getElementById('canvas-world');
+  w.addEventListener('mouseover', e => {
+    if (e.target.closest('.float-item')) bubbleEl.classList.add('hidden');
+  });
+  w.addEventListener('mouseout', e => {
+    if (e.target.closest('.float-item')) bubbleEl.classList.remove('hidden');
+  });
+}
+/* DOM 준비 후 실행 */
+window.addEventListener('load', initBubbleHover);
 
 /* ─────────────────────────────────────────────
    4. 타일 기본 요소 정의 (월드 좌표 px)

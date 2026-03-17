@@ -13,9 +13,8 @@
 </head>
 <body>
 
-  <!-- 커스텀 커서 -->
-  <div id="cursor" aria-hidden="true"></div>
-  <div id="cursor-follower" aria-hidden="true"></div>
+  <!-- 커서 말풍선 -->
+  <div id="cursor-bubble" aria-hidden="true">마우스 휠을 움직여 보세요</div>
 
   <!-- 페이지 전환 오버레이 -->
   <div id="page-transition" aria-hidden="true"></div>
@@ -31,24 +30,7 @@
 
   </main>
 
-  <!-- 회전 배지 (우하단) -->
-  <div id="badge" aria-hidden="true">
-    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <path id="badge-circle"
-          d="M 60,60 m -42,0 a 42,42 0 1,1 84,0 a 42,42 0 1,1 -84,0"
-          fill="none"/>
-      </defs>
-      <text>
-        <textPath href="#badge-circle" startOffset="0%">
-          무한탐색 · INFINITE CANVAS · 오늘뭐먹지 ·&nbsp;
-        </textPath>
-      </text>
-    </svg>
-    <span class="badge-star">★</span>
-  </div>
-
-  <script src="data.js"></script>
+<script src="data.js"></script>
   <script src="main.js"></script>
 </body>
 </html>
