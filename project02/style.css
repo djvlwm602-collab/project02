@@ -236,9 +236,97 @@ body.is-dragging {
   pointer-events: none; /* 부모가 받음 */
 }
 
-/* 호버 시 내부 이미지 추가 줌인 */
+/* 이미지 글리치 인터랙션
+   — pseudo-element를 항상 DOM에 유지해 hover 시 생성/삭제로 인한 깜빡임 방지
+   — hover 시 animation-play-state만 running으로 전환 */
+
+/* 스캔라인 오버레이 — 항상 존재, 기본 paused */
+.img-item .img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.07) 3px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  z-index: 3;
+  pointer-events: none;
+  border-radius: 44px;
+  animation: glitch-scan 0.65s steps(1) infinite;
+  animation-play-state: paused; /* 비호버 시 0% 고정 = opacity:0 */
+}
+
+/* RGB 컬러 플래시 오버레이 — 항상 존재, 기본 paused */
+.img-item .img-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  border-radius: 44px;
+  animation: glitch-rgb 0.65s steps(1) infinite;
+  animation-play-state: paused; /* 비호버 시 0% 고정 = transparent */
+}
+
+/* 호버 시 animation 재생 + 이미지 글리치 */
+.img-item:hover .img-wrap::before,
+.img-item:hover .img-wrap::after {
+  animation-play-state: running;
+}
+
 .img-item:hover img {
-  transform: scale(1.1);
+  animation: glitch-img 0.65s steps(1) infinite;
+  /* transition 충돌 없음 — CSS animation이 동일 속성 transition을 자동 덮음 */
+}
+
+/* ── 글리치 키프레임 ── */
+
+/* 이미지 픽셀 지터 — 순간이동 느낌의 transform + 색상 왜곡 */
+@keyframes glitch-img {
+  0%,  13% { transform: scale(1.1) translate(0,     0);    filter: none; }
+  14%       { transform: scale(1.1) translate(-6px,  0);    filter: hue-rotate(90deg)  saturate(2.5); }
+  17%       { transform: scale(1.1) translate( 6px,  1px);  filter: hue-rotate(90deg)  saturate(2.5); }
+  19%       { transform: scale(1.1) translate( 0,    0);    filter: none; }
+  20%, 44%  { transform: scale(1.1) translate(0,     0);    filter: none; }
+  45%       { transform: scale(1.1) translate( 5px, -2px);  filter: hue-rotate(200deg) saturate(3) brightness(1.15); }
+  49%       { transform: scale(1.1) translate(-5px,  2px);  filter: hue-rotate(200deg) saturate(3) brightness(1.15); }
+  51%       { transform: scale(1.1) translate( 0,    0);    filter: none; }
+  52%, 72%  { transform: scale(1.1) translate(0,     0);    filter: none; }
+  73%       { transform: scale(1.1) translate(-4px,  1px);  filter: hue-rotate(300deg) saturate(2); }
+  76%       { transform: scale(1.1) translate( 4px, -1px);  filter: hue-rotate(300deg) saturate(2); }
+  78%       { transform: scale(1.1) translate( 0,    0);    filter: none; }
+  79%, 100% { transform: scale(1.1) translate(0,     0);    filter: none; }
+}
+
+/* 스캔라인 명멸 — 글리치 발생 구간에만 표시 */
+@keyframes glitch-scan {
+  0%,  13% { opacity: 0; }
+  14%, 19% { opacity: 1; }
+  20%, 44% { opacity: 0; }
+  45%, 51% { opacity: 1; }
+  52%, 72% { opacity: 0; }
+  73%, 78% { opacity: 1; }
+  79%, 100%{ opacity: 0; }
+}
+
+/* RGB 채널 분리 플래시 */
+@keyframes glitch-rgb {
+  0%,  13% { background: transparent; }
+  14%       { background: rgba(255,  30,  60, 0.10); }
+  16%       { background: rgba(  0, 200, 255, 0.10); }
+  19%       { background: transparent; }
+  20%, 44% { background: transparent; }
+  45%       { background: rgba(  0, 255, 120, 0.08); }
+  48%       { background: rgba(255,  30,  60, 0.08); }
+  51%       { background: transparent; }
+  52%, 72% { background: transparent; }
+  73%       { background: rgba(  0, 200, 255, 0.10); }
+  76%       { background: rgba(255,  30,  60, 0.10); }
+  78%       { background: transparent; }
+  79%, 100%{ background: transparent; }
 }
 
 /* 딤 오버레이 */
