@@ -103,6 +103,17 @@ body.is-dragging {
 }
 
 /* ===================================
+   파티클 배경 캔버스
+=================================== */
+#particle-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2; /* grid(::before z:0) 위, canvas-world(z:5) 아래 */
+  pointer-events: none; /* 드래그 이벤트 방해 안 함 */
+  display: block;
+}
+
+/* ===================================
    무한 월드 컨테이너
 =================================== */
 #canvas-world {
