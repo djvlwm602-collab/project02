@@ -322,13 +322,6 @@ body.is-dragging {
   color: var(--white);
   position: relative;
   text-decoration: none;
-  border-bottom: 3px solid transparent;
-  transition: border-color 0.25s ease;
-}
-
-/* 호버 시 텍스트 라인만 표시 */
-.text-item:hover span {
-  border-bottom-color: var(--white);
 }
 
 .text-item span::before {
