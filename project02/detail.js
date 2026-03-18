@@ -61,7 +61,8 @@ function createCard(restaurant) {
 
   card.innerHTML = `
     <div class="card-thumb">
-      <img src="${restaurant.thumbnail}" alt="${restaurant.name}" loading="lazy">
+      <img src="${restaurant.thumbnail}" alt="${restaurant.name}" loading="lazy"
+           onerror="this.onerror=null;this.src='https://picsum.photos/seed/${restaurant.id}/600/400'">
       <span class="card-price-badge">${restaurant.priceRange}</span>
     </div>
     <div class="card-body">

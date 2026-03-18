@@ -165,7 +165,7 @@ ITEMS_BASE.forEach((cfg, baseIdx) => {
       if (cfg.type === 'image') {
         el.className += ' img-item';
         el.style.width = cfg.size + 'px';
-        el.innerHTML = `<div class="img-wrap"><img src="${meta.image}" alt="${cfg.tag}" draggable="false"><div class="img-overlay"><span class="img-overlay-text">${cfg.tag}</span></div></div>`;
+        el.innerHTML = `<div class="img-wrap"><img src="${meta.image}" alt="${cfg.tag}" draggable="false" onerror="this.onerror=null;this.src='https://picsum.photos/seed/${encodeURIComponent(cfg.tag)}/600/500'"><div class="img-overlay"><span class="img-overlay-text">${cfg.tag}</span></div></div>`;
       }
       else if (cfg.type === 'icon') {
         el.className += ' img-item icon-item';
